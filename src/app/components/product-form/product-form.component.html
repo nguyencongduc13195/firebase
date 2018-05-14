@@ -1,0 +1,51 @@
+<div class="row">
+  <div class="col-md-6">
+    <form [formGroup]="productForm" (submit)="onSubmit(productForm.value)">
+      <div class="form-group">
+        <label for="title">Title</label>
+        <input type="text" class="form-control" [(ngModel)]="product.title" placeholder="Title" formControlName="title">
+        <div class="alert alert-danger" role="alert" *ngIf="productForm.controls.title.touched && productForm.controls.title?.errors?.required">
+          <strong>Title is required</strong>
+        </div>
+      </div>
+      <div class="form-group">
+        <label for="price">Price</label>
+        <div class="input-group-prepend">
+          <span class="input-group-text" id="basic-addon1">$</span>
+          <input type="text" class="form-control" [(ngModel)]="product.price" placeholder="Price" formControlName="price">
+        </div>
+        <div class="alert alert-danger" role="alert" *ngIf="productForm.controls.price.touched && productForm.controls.price?.errors?.required">
+          <strong>Price is required</strong>
+        </div>
+      </div>
+      <div class="form-group">
+        <label for="category">Category</label>
+        <select class="form-control" [(ngModel)]="product.category" formControlName="category">
+          <option [value]="0">Select Category</option>
+          <option *ngFor="let item of categories$ | async" [value]="item.$key">{{item.name}}</option>
+        </select>
+        <div class="alert alert-danger" role="alert" *ngIf="productForm.controls.category.touched && productForm.controls.category?.errors?.required">
+          <strong>Category is required</strong>
+        </div>
+      </div>
+      <div class="form-group">
+        <label for="imageurl">Image URL</label>
+        <input type="text" [(ngModel)]="product.imageURL" class="form-control" placeholder="Image URL" formControlName="imageURL">
+        <div class="alert alert-danger" role="alert" *ngIf="productForm.controls.imageURL.touched && productForm.controls.imageURL?.errors?.required">
+          <strong>Image URL is required</strong>
+        </div>
+      </div>
+      <button type="submit" class="btn btn-primary" [disabled]="productForm.invalid">Submit</button>
+      <button type="button" class="btn btn-danger" (click)="onDelete()" *ngIf="productID">Delete</button>
+    </form>
+  </div>
+  <div class="col-md-6">
+    <div class="card">
+      <img class="card-img-top" [src]="product.imageURL" *ngIf="product.imageURL">
+      <div class="card-body">
+        <h4 class="card-title">{{product.title || 'No Name'}}</h4>
+        <p class="card-text">{{(product.price ? product.price : 0) | currency}}</p>
+      </div>
+    </div>
+  </div>
+</div>
